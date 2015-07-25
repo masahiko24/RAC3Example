@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D66352BC1B639BD900307BC7 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D66352B91B639BD900307BC7 /* Box.framework */; };
+		D66352BD1B639BD900307BC7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D66352BA1B639BD900307BC7 /* ReactiveCocoa.framework */; };
+		D66352BE1B639BD900307BC7 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D66352BB1B639BD900307BC7 /* Result.framework */; };
 		D679AED31B637C73001DDD3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679AED21B637C73001DDD3B /* AppDelegate.swift */; };
 		D679AED61B637C73001DDD3B /* RAC3Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D679AED41B637C73001DDD3B /* RAC3Example.xcdatamodeld */; };
 		D679AED81B637C73001DDD3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679AED71B637C73001DDD3B /* ViewController.swift */; };
@@ -27,6 +30,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D66352B91B639BD900307BC7 /* Box.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Box.framework; path = Carthage/Build/iOS/Box.framework; sourceTree = "<group>"; };
+		D66352BA1B639BD900307BC7 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		D66352BB1B639BD900307BC7 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		D679AECD1B637C73001DDD3B /* RAC3Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAC3Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D679AED11B637C73001DDD3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D679AED21B637C73001DDD3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +51,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D66352BC1B639BD900307BC7 /* Box.framework in Frameworks */,
+				D66352BD1B639BD900307BC7 /* ReactiveCocoa.framework in Frameworks */,
+				D66352BE1B639BD900307BC7 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,11 +67,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D66352C01B639CBA00307BC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D66352B91B639BD900307BC7 /* Box.framework */,
+				D66352BA1B639BD900307BC7 /* ReactiveCocoa.framework */,
+				D66352BB1B639BD900307BC7 /* Result.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D679AEC41B637C73001DDD3B = {
 			isa = PBXGroup;
 			children = (
 				D679AECF1B637C73001DDD3B /* RAC3Example */,
 				D679AEE81B637C73001DDD3B /* RAC3ExampleTests */,
+				D66352C01B639CBA00307BC7 /* Frameworks */,
 				D679AECE1B637C73001DDD3B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +145,7 @@
 				D679AEC91B637C73001DDD3B /* Sources */,
 				D679AECA1B637C73001DDD3B /* Frameworks */,
 				D679AECB1B637C73001DDD3B /* Resources */,
+				D66352BF1B639BEC00307BC7 /* Copy Frameworks Installed By Carthage */,
 			);
 			buildRules = (
 			);
@@ -209,6 +230,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D66352BF1B639BEC00307BC7 /* Copy Frameworks Installed By Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Box.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework",
+			);
+			name = "Copy Frameworks Installed By Carthage";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D679AEC91B637C73001DDD3B /* Sources */ = {
@@ -346,6 +387,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RAC3Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -356,6 +401,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RAC3Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -415,6 +464,7 @@
 				D679AEF11B637C73001DDD3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D679AEF21B637C73001DDD3B /* Build configuration list for PBXNativeTarget "RAC3ExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +473,7 @@
 				D679AEF41B637C73001DDD3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
