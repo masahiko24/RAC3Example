@@ -90,7 +90,7 @@ class LoginFormViewController: UIViewController {
                 self.performSegueWithIdentifier(LoginFormViewController.ToTimelineUnwindSegueID, sender: self.cancelButtonItem)
             case let .Error(boxedError):
                 let error = boxedError.value
-                let alert = UIAlertController(title: "エラー", message: error.localizedDescription, preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
                     
                 }))
