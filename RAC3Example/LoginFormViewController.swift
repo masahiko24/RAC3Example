@@ -65,7 +65,10 @@ class LoginFormViewController: UIViewController {
     /// The action which represents login to the service.
     private(set) lazy var loginAction: Action<AnyObject?, Account, NSError> = { [unowned self] in
         Action<AnyObject?, Account, NSError>(enabledIf: self.canLogin, { [unowned self] _ in
-            return Client.sharedClient().sendLoginRequest(username: self.username.value, password: self.password.value)
+            return Client.sharedClient().sendLoginRequest(
+                username: self.username.value,
+                password: self.password.value
+            )
         })
     }()
     
@@ -85,7 +88,7 @@ class LoginFormViewController: UIViewController {
         //  Performs login action when `done` key is clicked while password input
         self.passwordField.rac_signalForControlEvents(.EditingDidEndOnExit).toSignalProducer()
             |> catch { _ in SignalProducer<AnyObject?, NoError>.empty }
-            |> flatMap(.Merge) { _ in
+            |> flatMap(.Merge) { [unowned self] _ in
                 return self.loginAction.apply(self.passwordField)
                     |> catch { _ in SignalProducer.empty }
             }
@@ -95,13 +98,13 @@ class LoginFormViewController: UIViewController {
         let error = SignalProducer(values: [
             self.usernameField.rac_textSignal().toSignalProducer()
                 |> map { $0 as! String }
-                |> map { text in text.isEmpty ? "User name must not be empty!" : "" }
+                |> map { $0.isEmpty ? "User name must not be empty!" : "" }
                 |> sampleOn(self.usernameField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
                     |> map { _ in () }
                     |> catch { _ in SignalProducer.empty }),
             self.passwordField.rac_textSignal().toSignalProducer()
                 |> map { $0 as! String }
-                |> map { text in text.isEmpty ? "Password must not be empty!" : "" }
+                |> map { $0.isEmpty ? "Password must not be empty!" : "" }
                 |> sampleOn(self.passwordField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
                     |> map { _ in () }
                     |> catch { _ in SignalProducer.empty })
@@ -111,7 +114,7 @@ class LoginFormViewController: UIViewController {
         //  Binding signal of error message with text of label
         DynamicProperty(object: self.errorLabel, keyPath: "text") <~ error
             |> map { $0 as AnyObject? }
-            |> catch { _ in return SignalProducer.empty }
+            |> catch { _ in SignalProducer.empty }
         
         //  Responding to cancel action
         self.cancelAction.events.observe(next: { [unowned self] event in
