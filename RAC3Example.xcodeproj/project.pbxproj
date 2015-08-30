@@ -15,6 +15,7 @@
 		D60702B41B6E161F00E76204 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D66352BB1B639BD900307BC7 /* Result.framework */; };
 		D6111D6F1B7B73B000779A52 /* Timeline.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6111D6E1B7B73B000779A52 /* Timeline.xcassets */; };
 		D6111D721B7BA88A00779A52 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6111D711B7BA88A00779A52 /* Client.swift */; };
+		D65DE6DA1B92FD3300DB335B /* ReactiveCocoa+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65DE6D91B92FD3300DB335B /* ReactiveCocoa+Extensions.swift */; };
 		D679AED31B637C73001DDD3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679AED21B637C73001DDD3B /* AppDelegate.swift */; };
 		D679AEDB1B637C73001DDD3B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D679AED91B637C73001DDD3B /* Main.storyboard */; };
 		D679AEDD1B637C73001DDD3B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D679AEDC1B637C73001DDD3B /* Images.xcassets */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		D6111D6E1B7B73B000779A52 /* Timeline.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Timeline.xcassets; sourceTree = "<group>"; };
 		D6111D711B7BA88A00779A52 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		D65DE6D91B92FD3300DB335B /* ReactiveCocoa+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ReactiveCocoa+Extensions.swift"; sourceTree = "<group>"; };
 		D66352B91B639BD900307BC7 /* Box.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Box.framework; path = Carthage/Build/iOS/Box.framework; sourceTree = "<group>"; };
 		D66352BA1B639BD900307BC7 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		D66352BB1B639BD900307BC7 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				FE1A411C6980C9AD821B80F4 /* TimelineViewController.swift */,
 				D6111D6E1B7B73B000779A52 /* Timeline.xcassets */,
 				D6C527F21B64E7AF00F595F4 /* LoginFormViewController.swift */,
+				D65DE6D91B92FD3300DB335B /* ReactiveCocoa+Extensions.swift */,
 				D679AEDC1B637C73001DDD3B /* Images.xcassets */,
 				D679AEDE1B637C73001DDD3B /* LaunchScreen.xib */,
 				D679AED01B637C73001DDD3B /* Supporting Files */,
@@ -284,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D65DE6DA1B92FD3300DB335B /* ReactiveCocoa+Extensions.swift in Sources */,
 				D6C527F31B64E7AF00F595F4 /* LoginFormViewController.swift in Sources */,
 				D679AED31B637C73001DDD3B /* AppDelegate.swift in Sources */,
 				D6111D721B7BA88A00779A52 /* Client.swift in Sources */,
