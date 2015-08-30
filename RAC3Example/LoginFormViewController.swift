@@ -34,37 +34,32 @@ class LoginFormViewController: UIViewController {
     /// The property of username.
     lazy var username: MutableProperty<String> = {
         let property = MutableProperty<String>("")
-        property <~ self.usernameField.rac_textSignal().toSignalProducer()
-            |> map { $0 as! String }
-            |> catch { _ in SignalProducer.empty }
+        property <~ self.usernameField.textSignalProducer
         return property
     }()
     
     /// The property of password.
     lazy var password: MutableProperty<String> = {
         let property = MutableProperty<String>("")
-        property <~ self.passwordField.rac_textSignal().toSignalProducer()
-            |> map { $0 as! String }
-            |> catch { _ in SignalProducer.empty }
+        property <~ self.passwordField.textSignalProducer
         return property
     }()
     
     /// The property of bool value which determines whether user can send login request.
     lazy var canLogin: MutableProperty<Bool> = {
         let property = MutableProperty<Bool>(false)
-        property <~ combineLatest(self.username.producer, self.password.producer)
-            |> map { (username, password) in !username.isEmpty && !password.isEmpty }
+        property <~ !(self.username.producer |> map { $0.isEmpty }) && !(self.password.producer |> map { $0.isEmpty })
         return property
     }()
     
     /// The action which represents canceling login.
-    let cancelAction = Action<AnyObject?, AnyObject, NoError> { item in
+    let cancelAction = Action<Void, Void, NoError> { item in
         return SignalProducer.empty
     }
     
     /// The action which represents login to the service.
-    private(set) lazy var loginAction: Action<AnyObject?, Account, NSError> = { [unowned self] in
-        Action<AnyObject?, Account, NSError>(enabledIf: self.canLogin, { [unowned self] _ in
+    private(set) lazy var loginAction: Action<Void, Account, NSError> = { [unowned self] in
+        return Action(enabledIf: self.canLogin, { [unowned self] _ in
             return Client.sharedClient().sendLoginRequest(
                 username: self.username.value,
                 password: self.password.value
@@ -78,35 +73,37 @@ class LoginFormViewController: UIViewController {
         super.viewDidLoad()
         
         //  Binding actions to controls
-        self.cancelButtonItem.rac_command = toRACCommand(self.cancelAction)
-        self.loginButtonItem.rac_command = toRACCommand(self.loginAction)
+        self.cancelButtonItem.reactiveCocoaAction = Action(enabledIf: self.cancelAction.enabled) { [unowned self] input in
+            return self.cancelAction.apply()
+                |> map { _ in nil }
+                |> catch { _ in SignalProducer.empty }
+        }
+        
+        self.loginButtonItem.reactiveCocoaAction = Action(enabledIf: self.loginAction.enabled) { [unowned self] input in
+            return self.loginAction.apply()
+                |> map { _ in nil }
+                |> catch { _ in SignalProducer.empty }
+        }
         
         //  Moves focus to password text field when `return` key is clicked while username input
-        self.usernameField.rac_signalForControlEvents(.EditingDidEndOnExit).toSignalProducer().start(next: { [unowned self] _ in
+        self.usernameField.signalForControlEvents(.EditingDidEndOnExit).start(next: { [unowned self] _ in
             self.passwordField.becomeFirstResponder()
         })
+        
         //  Performs login action when `done` key is clicked while password input
-        self.passwordField.rac_signalForControlEvents(.EditingDidEndOnExit).toSignalProducer()
+        self.passwordField.signalForControlEvents(.EditingDidEndOnExit)
             |> catch { _ in SignalProducer<AnyObject?, NoError>.empty }
             |> flatMap(.Merge) { [unowned self] _ in
-                return self.loginAction.apply(self.passwordField)
+                return self.loginAction.apply()
                     |> catch { _ in SignalProducer.empty }
             }
             |> start()
-        
-        //  Samplers
-        let usernameEditingDidEnd = self.usernameField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
-            |> map { _ in () }
-            |> catch { _ in SignalProducer<(), NoError>.empty }
-        let passwordEditingDidEnd = self.passwordField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
-            |> map { _ in () }
-            |> catch { _ in SignalProducer<(), NoError>.empty }
         
         //  Error message
         let error = SignalProducer(values: [
                 self.username.producer
                     |> map { $0.isEmpty ? "Username is empty!" : "" }
-                    |> sampleOn(usernameEditingDidEnd),
+                    |> sampleOn(pulseFrom(self.usernameField.signalForControlEvents(.EditingDidEnd))),
                 combineLatest(self.username.producer, self.password.producer)
                     |> map { (username, password) -> String in
                         if username.isEmpty && password.isEmpty {
@@ -117,7 +114,7 @@ class LoginFormViewController: UIViewController {
                             return ""
                         }
                     }
-                    |> sampleOn(passwordEditingDidEnd)
+                    |> sampleOn(pulseFrom(self.passwordField.signalForControlEvents(.EditingDidEnd)))
             ])
             |> flatten(.Merge)
         
