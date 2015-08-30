@@ -94,20 +94,30 @@ class LoginFormViewController: UIViewController {
             }
             |> start()
         
-        //  Signal of error message
+        //  Samplers
+        let usernameEditingDidEnd = self.usernameField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
+            |> map { _ in () }
+            |> catch { _ in SignalProducer<(), NoError>.empty }
+        let passwordEditingDidEnd = self.passwordField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
+            |> map { _ in () }
+            |> catch { _ in SignalProducer<(), NoError>.empty }
+        
+        //  Error message
         let error = SignalProducer(values: [
-            self.usernameField.rac_textSignal().toSignalProducer()
-                |> map { $0 as! String }
-                |> map { $0.isEmpty ? "User name must not be empty!" : "" }
-                |> sampleOn(self.usernameField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
-                    |> map { _ in () }
-                    |> catch { _ in SignalProducer.empty }),
-            self.passwordField.rac_textSignal().toSignalProducer()
-                |> map { $0 as! String }
-                |> map { $0.isEmpty ? "Password must not be empty!" : "" }
-                |> sampleOn(self.passwordField.rac_signalForControlEvents(.EditingDidEnd).toSignalProducer()
-                    |> map { _ in () }
-                    |> catch { _ in SignalProducer.empty })
+                self.username.producer
+                    |> map { $0.isEmpty ? "Username is empty!" : "" }
+                    |> sampleOn(usernameEditingDidEnd),
+                combineLatest(self.username.producer, self.password.producer)
+                    |> map { (username, password) -> String in
+                        if username.isEmpty && password.isEmpty {
+                            return "Username and password are empty!"
+                        } else if password.isEmpty {
+                            return "Password is empty!"
+                        } else {
+                            return ""
+                        }
+                    }
+                    |> sampleOn(passwordEditingDidEnd)
             ])
             |> flatten(.Merge)
         
